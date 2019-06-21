@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var balls = ["ballBlue", "ballYellow", "ballPurple", "ballGrey", "ballRed", "ballCyan", "ballGreen"]
     var scoreLabel: SKLabelNode!
+    var maxBalls = 5
     var ballsCount = 0
 
     var score = 0 {
@@ -89,7 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     box.physicsBody?.isDynamic = false
                     addChild(box)
                 } else {
-                    if ballsCount <= 5 {
+                    if ballsCount <= maxBalls {
                         let randomBall = balls.randomElement()!
                         let ball = SKSpriteNode(imageNamed: randomBall)
                         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
@@ -146,6 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if object.name == "good" {
             destroy(ball: ball)
             score += 1
+            maxBalls += 1
         } else if object.name == "bad" {
             destroy(ball: ball)
             score -= 1

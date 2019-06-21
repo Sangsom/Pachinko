@@ -36,4 +36,12 @@ class GameScene: SKScene {
             addChild(ball)
         }
     }
+
+    func makeBouncer(at position: CGPoint) {
+        let bouncer = SKSpriteNode(imageNamed: "bouncer")
+        bouncer.position = position
+        bouncer.physicsBody = SKPhysicsBody(circleOfRadius: bouncer.size.width / 2.0)
+        bouncer.physicsBody?.isDynamic = false
+        addChild(bouncer)
+    }
 }

@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var balls = ["ballBlue", "ballYellow", "ballPurple", "ballGrey", "ballRed", "ballCyan", "ballGreen"]
     var scoreLabel: SKLabelNode!
+    var ballsCount = 0
 
     var score = 0 {
         didSet {
@@ -83,20 +84,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         size: size)
                     box.zRotation = CGFloat.random(in: 0...3)
                     box.position = location
-
+                    box.name = "box"
                     box.physicsBody = SKPhysicsBody(rectangleOf: box.size)
                     box.physicsBody?.isDynamic = false
                     addChild(box)
                 } else {
-                    let randomBall = balls.randomElement()!
-                    let ball = SKSpriteNode(imageNamed: randomBall)
-                    ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
-                    ball.physicsBody!.contactTestBitMask = ball.physicsBody!.collisionBitMask
-                    ball.physicsBody?.restitution = 0.4
-                    ball.position = location
-                    ball.position.y = CGFloat(700)
-                    ball.name = "ball"
-                    addChild(ball)
+                    if ballsCount <= 5 {
+                        let randomBall = balls.randomElement()!
+                        let ball = SKSpriteNode(imageNamed: randomBall)
+                        ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
+                        ball.physicsBody!.contactTestBitMask = ball.physicsBody!.collisionBitMask
+                        ball.physicsBody?.restitution = 0.4
+                        ball.position = location
+                        ball.position.y = CGFloat(700)
+                        ball.name = "ball"
+                        addChild(ball)
+                        ballsCount += 1
+                    }
                 }
             }
         }
@@ -145,6 +149,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if object.name == "bad" {
             destroy(ball: ball)
             score -= 1
+        } else if object.name == "box" {
+            destroy(ball: object)
         }
     }
 
@@ -154,6 +160,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(fireParticles)
         }
         ball.removeFromParent()
+        ballsCount -= 1
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
